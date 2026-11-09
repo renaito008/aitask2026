@@ -1,53 +1,28 @@
-# 目標管理アプリ — Cloudflare Workers + D1対応
+# aitask2026
+AI鬧・虚髢狗匱繝ｻ繧ｿ繧ｹ繧ｯ邂｡逅・ヤ繝ｼ繝ｫ
 
-## 最新状況：GitHub復旧待ちの準備
+# 逶ｮ讓咏ｮ｡逅・い繝励Μ 窶・Cloudflare Workers + D1蟇ｾ蠢・
+## 譛譁ｰ迥ｶ豕・ｼ哦itHub蠕ｩ譌ｧ蠕・■縺ｮ貅門ｙ
 
-ユーザー環境の実Wranglerローカル起動・編集/閲覧確認は完了しています。既存WorkerへのCLI公開はユーザー承認済みで、親担当がCloudflare認証と公開を担当します。以下に残る「CLI未導入」「実ローカル未検証」は初期移植時の記録です。
-
-GitHubの復旧を待つ間の安全な準備と、復旧後のWorkers Builds設定は [GITHUB-RECOVERY.md](GITHUB-RECOVERY.md) を参照してください。実行する準備は `node tools/prepare-release.mjs`、公開するときだけ `node tools/deploy-existing-worker.mjs --deploy`。この補助作業自体はデプロイ・push・データ移行を実行していません。
-
-既存の画面・配色・操作と、リンクを知る人が編集/閲覧する方式を維持したWorkers移植版です。ログインや管理者アカウントは追加していません。roomsは既存の4カラムのみ、state JSONの形式・内容も維持します。
-
-## 現在の状態
-
-- Worker/D1 API、公開資産の分離、設定、非破壊移行ツールを実装。
-- 既存機能・NodeSQLite D1互換shim・手動適用helperの**29テスト成功**。
-- 同じ互換bridgeのブラウザでルーム作成→独立contextの編集/閲覧→目標/タスク保存→閲覧更新→完了/達成承認→1on1記録→履歴閲覧を確認。閲覧tokenの直接保存APIは403、編集UIはありません。背景色RGB(9,13,25)も維持しています。
-- **本物のWrangler/workerd/Miniflare/D1では未検証。デプロイ・remoteDB操作は未実行。** この環境にはWrangler/npm/npxがなく、ネットワーク経由の追加導入は行っていません。
-- 正式先 C:\ESD\ai\task2026 は書込範囲外のため未変更。今回の成果物は許可されたTEMPコピーです。元DBや個人データは含めていません。
-
-## ローカルで確認する
-
-Node.js 24.22.1で確認済み。追加依存なしで次を実行できます。
-
+繝ｦ繝ｼ繧ｶ繝ｼ迺ｰ蠅・・螳欷rangler繝ｭ繝ｼ繧ｫ繝ｫ襍ｷ蜍輔・邱ｨ髮・髢ｲ隕ｧ遒ｺ隱阪・螳御ｺ・＠縺ｦ縺・∪縺吶よ里蟄聾orker縺ｸ縺ｮCLI蜈ｬ髢九・繝ｦ繝ｼ繧ｶ繝ｼ謇ｿ隱肴ｸ医∩縺ｧ縲∬ｦｪ諡・ｽ薙′Cloudflare隱崎ｨｼ縺ｨ蜈ｬ髢九ｒ諡・ｽ薙＠縺ｾ縺吶ゆｻ･荳九↓谿九ｋ縲靴LI譛ｪ蟆主・縲阪悟ｮ溘Ο繝ｼ繧ｫ繝ｫ譛ｪ讀懆ｨｼ縲阪・蛻晄悄遘ｻ讀肴凾縺ｮ險倬鹸縺ｧ縺吶・
+GitHub縺ｮ蠕ｩ譌ｧ繧貞ｾ・▽髢薙・螳牙・縺ｪ貅門ｙ縺ｨ縲∝ｾｩ譌ｧ蠕後・Workers Builds險ｭ螳壹・ [GITHUB-RECOVERY.md](GITHUB-RECOVERY.md) 繧貞盾辣ｧ縺励※縺上□縺輔＞縲ょｮ溯｡後☆繧区ｺ門ｙ縺ｯ `node tools/prepare-release.mjs`縲∝・髢九☆繧九→縺阪□縺・`node tools/deploy-existing-worker.mjs --deploy`縲ゅ％縺ｮ陬懷勧菴懈･ｭ閾ｪ菴薙・繝・・繝ｭ繧､繝ｻpush繝ｻ繝・・繧ｿ遘ｻ陦後ｒ螳溯｡後＠縺ｦ縺・∪縺帙ｓ縲・
+譌｢蟄倥・逕ｻ髱｢繝ｻ驟崎牡繝ｻ謫堺ｽ懊→縲√Μ繝ｳ繧ｯ繧堤衍繧倶ｺｺ縺檎ｷｨ髮・髢ｲ隕ｧ縺吶ｋ譁ｹ蠑上ｒ邯ｭ謖√＠縺欷orkers遘ｻ讀咲沿縺ｧ縺吶ゅΟ繧ｰ繧､繝ｳ繧・ｮ｡逅・・い繧ｫ繧ｦ繝ｳ繝医・霑ｽ蜉縺励※縺・∪縺帙ｓ縲Ｓooms縺ｯ譌｢蟄倥・4繧ｫ繝ｩ繝縺ｮ縺ｿ縲《tate JSON縺ｮ蠖｢蠑上・蜀・ｮｹ繧らｶｭ謖√＠縺ｾ縺吶・
+## 迴ｾ蝨ｨ縺ｮ迥ｶ諷・
+- Worker/D1 API縲∝・髢玖ｳ・肇縺ｮ蛻・屬縲∬ｨｭ螳壹・撼遐ｴ螢顔ｧｻ陦後ヤ繝ｼ繝ｫ繧貞ｮ溯｣・・- 譌｢蟄俶ｩ溯・繝ｻNodeSQLite D1莠呈鋤shim繝ｻ謇句虚驕ｩ逕ｨhelper縺ｮ**29繝・せ繝域・蜉・*縲・- 蜷後§莠呈鋤bridge縺ｮ繝悶Λ繧ｦ繧ｶ縺ｧ繝ｫ繝ｼ繝菴懈・竊堤峡遶議ontext縺ｮ邱ｨ髮・髢ｲ隕ｧ竊堤岼讓・繧ｿ繧ｹ繧ｯ菫晏ｭ倪・髢ｲ隕ｧ譖ｴ譁ｰ竊貞ｮ御ｺ・驕疲・謇ｿ隱坂・1on1險倬鹸竊貞ｱ･豁ｴ髢ｲ隕ｧ繧堤｢ｺ隱阪る夢隕ｧtoken縺ｮ逶ｴ謗･菫晏ｭ連PI縺ｯ403縲∫ｷｨ髮・I縺ｯ縺ゅｊ縺ｾ縺帙ｓ縲りレ譎ｯ濶ｲRGB(9,13,25)繧らｶｭ謖√＠縺ｦ縺・∪縺吶・- **譛ｬ迚ｩ縺ｮWrangler/workerd/Miniflare/D1縺ｧ縺ｯ譛ｪ讀懆ｨｼ縲ゅョ繝励Ο繧､繝ｻremoteDB謫堺ｽ懊・譛ｪ螳溯｡後・* 縺薙・迺ｰ蠅・↓縺ｯWrangler/npm/npx縺後↑縺上√ロ繝・ヨ繝ｯ繝ｼ繧ｯ邨檎罰縺ｮ霑ｽ蜉蟆主・縺ｯ陦後▲縺ｦ縺・∪縺帙ｓ縲・- 豁｣蠑丞・ C:\ESD\ai\task2026 縺ｯ譖ｸ霎ｼ遽・峇螟悶・縺溘ａ譛ｪ螟画峩縲ゆｻ雁屓縺ｮ謌先棡迚ｩ縺ｯ險ｱ蜿ｯ縺輔ｌ縺鬱EMP繧ｳ繝斐・縺ｧ縺吶ょ・DB繧・倶ｺｺ繝・・繧ｿ縺ｯ蜷ｫ繧√※縺・∪縺帙ｓ縲・
+## 繝ｭ繝ｼ繧ｫ繝ｫ縺ｧ遒ｺ隱阪☆繧・
+Node.js 24.22.1縺ｧ遒ｺ隱肴ｸ医∩縲りｿｽ蜉萓晏ｭ倥↑縺励〒谺｡繧貞ｮ溯｡後〒縺阪∪縺吶・
 1. `node tools/build-assets.mjs`
 2. `node --test tests/*.test.mjs`
-3. `node tools/preview-worker-shim.mjs` → http://127.0.0.1:4182
+3. `node tools/preview-worker-shim.mjs` 竊・http://127.0.0.1:4182
 
-3は実Cloudflareではなく、NodeSQLiteをD1 APIへ合わせたローカルbridgeです。プレビューデータは終了すると消えます。画面のD1表記は配信時の環境説明を確認するためで、実D1接続済みという意味ではありません。
+3縺ｯ螳櫃loudflare縺ｧ縺ｯ縺ｪ縺上¨odeSQLite繧奪1 API縺ｸ蜷医ｏ縺帙◆繝ｭ繝ｼ繧ｫ繝ｫbridge縺ｧ縺吶ゅ・繝ｬ繝薙Η繝ｼ繝・・繧ｿ縺ｯ邨ゆｺ・☆繧九→豸医∴縺ｾ縺吶ら判髱｢縺ｮD1陦ｨ險倥・驟堺ｿ｡譎ゅ・迺ｰ蠅・ｪｬ譏弱ｒ遒ｺ隱阪☆繧九◆繧√〒縲∝ｮ櫂1謗･邯壽ｸ医∩縺ｨ縺・≧諢丞袖縺ｧ縺ｯ縺ゅｊ縺ｾ縺帙ｓ縲・
+蠕捺擂縺ｮNode迚医・ `node server.mjs`縲√ヶ繝ｩ繧ｦ繧ｶ蜀・ｿ晏ｭ倥・譌ｧ隧ｦ菴懊・ `/demo` 縺ｧ縺吶ゅΝ繝ｼ繝・TML/CSS/clientJS縺ｯ豁｣譛ｬ縺九ｉ繝舌う繝医さ繝斐・縺怜､画峩縺励※縺・∪縺帙ｓ縲８orkers驟堺ｿ｡縺ｧ縺縺台ｿ晏ｭ伜・縺ｮ迺ｰ蠅・ｪｬ譏弱ｒ鄂ｮ謠帙＠縺ｾ縺吶・
+## 繝・・繝ｭ繧､縺ｨ遘ｻ陦・
+隧ｳ縺励￥縺ｯ [DEPLOYMENT.md](DEPLOYMENT.md)縲ゅΘ繝ｼ繧ｶ繝ｼ謖・ｮ壹・Worker蜷衡ask-management-api縲．1蜷衡ask-management-db縲｜inding DB縲‥atabase_id繧蜘rangler.jsonc縺ｸ險ｭ螳壽ｸ医∩縺ｧ縺吶りｨｭ螳夂｢ｺ隱阪□縺代↑繧・`node tools/check-deployment-config.mjs`縲・
+譛ｬ迚ｩ縺ｮCLI縺後≠繧句茜逕ｨ閠・腸蠅・〒 `npm install --save-dev wrangler@4` 繧定｡後▲縺ｦ縺九ｉ縲√Ο繝ｼ繧ｫ繝ｫD1蛻晄悄蛹悶→ `wrangler dev --local` 繧堤｢ｺ隱阪＠縺ｦ縺上□縺輔＞縲Ｑackage.json縺ｫ縺ｯ閾ｪ蜍輔ム繧ｦ繝ｳ繝ｭ繝ｼ繝我ｾ晏ｭ倥ｄdeploy script繧貞・繧後※縺・∪縺帙ｓ縲・
+繝ｦ繝ｼ繧ｶ繝ｼ縺ｯ縲畦ocal縺ｧ蝠城｡後↑縺代ｌ縺ｰdeploy縲阪→謖・､ｺ縺励※縺・∪縺吶りｦｪ諡・ｽ・繝ｦ繝ｼ繧ｶ繝ｼ縺梧悽迚ｩ迺ｰ蠅・〒縺ｮ遒ｺ隱阪→隱崎ｨｼ繝ｻ讓ｩ髯舌ｒ遒ｺ隱阪＠縺ｦ縺九ｉ蛻､譁ｭ縺励∪縺吶ら樟迺ｰ蠅・・shim繝・せ繝医□縺代ｒ螳櫃loudflare謌仙粥縺ｨ縺ｿ縺ｪ縺励※譛ｬ逡ｪ縺ｸ騾ｲ繧√※縺・∪縺帙ｓ縲・
+譌｢蟄牢QLite繧堤ｧｻ縺吝ｴ蜷医・譏守､ｺ逧・↑read-only export繧剃ｽｿ逕ｨ縺励∪縺吶ょ・DB繧定・蜍墓桃菴懊○縺壹∝酔荳ID/蜷御ｸ蛟､縺ｯno-op縲∫焚縺ｪ繧区里蟄伜､縺ｯ蜊倅ｸSQL蜈ｨ菴薙ｒ荳ｭ豁｢縲ょ､ｧ縺阪↑JSON縺ｮ閾ｪ蜍慕ｧｻ陦後・譛ｪ蟇ｾ蠢懊〒縺吶らｧ伜ｯ・Μ繝ｳ繧ｯ縺ｮ蜴滓枚縺ｯDB縺ｫ繧Ｆxport縺ｫ繧ゆｿ晏ｭ倥＠縺ｾ縺帙ｓ縺後《tate縺ｮ讌ｭ蜍吝・螳ｹ縺ｯprivate諠・ｱ縺ｨ縺励※謇ｱ縺｣縺ｦ縺上□縺輔＞縲・
+## 讒区・
 
-従来のNode版は `node server.mjs`、ブラウザ内保存の旧試作は `/demo` です。ルートHTML/CSS/clientJSは正本からバイトコピーし変更していません。Workers配信でだけ保存先の環境説明を置換します。
-
-## デプロイと移行
-
-詳しくは [DEPLOYMENT.md](DEPLOYMENT.md)。ユーザー指定のWorker名task-management-api、D1名task-management-db、binding DB、database_idをwrangler.jsoncへ設定済みです。設定確認だけなら `node tools/check-deployment-config.mjs`。
-
-本物のCLIがある利用者環境で `npm install --save-dev wrangler@4` を行ってから、ローカルD1初期化と `wrangler dev --local` を確認してください。package.jsonには自動ダウンロード依存やdeploy scriptを入れていません。
-
-ユーザーは「localで問題なければdeploy」と指示しています。親担当/ユーザーが本物環境での確認と認証・権限を確認してから判断します。現環境のshimテストだけを実Cloudflare成功とみなして本番へ進めていません。
-
-既存SQLiteを移す場合は明示的なread-only exportを使用します。元DBを自動操作せず、同一ID/同一値はno-op、異なる既存値は単一SQL全体を中止。大きなJSONの自動移行は未対応です。秘密リンクの原文はDBにもexportにも保存しませんが、stateの業務内容はprivate情報として扱ってください。
-
-## 構成
-
-- `worker/index.js`：Web標準のfetchハンドラ。APIとASSETSを経路制限付きで配信。
-- `worker/d1-repository.js`：WebCryptoとD1単一SQL CAS。Node依存なし。
-- `worker/rules.js` / `domain.js`：既存と同じ業務ルール。
-- `public/`：ホワイトリストの9資産だけ。DB/docs/tests/serverは配信しない。
-- `wrangler.jsonc`：既存Worker/D1向け設定。ログ無効、workers.dev維持。
-- `wrangler.local.jsonc`：実D1に触れないローカルCLI確認用。
-- `schema.sql`：既存roomsと同じ参考定義。自動実行しない。
-- `tools/export-rooms.mjs`：read-only export。private出力、上書き禁止。
-- `tests/worker.test.mjs` / `tests/d1-shim.mjs`：実D1とは区別した互換テスト。
-
-stateの履歴は最新3回に保持し、記録・間引き・リンク再発行は一つのUPDATEのCASで確定します。競合は409、失効リンクは401、閲覧による更新は403。意図しないログ/秘密をレスポンスへ出しません。無料枠の標準構成を意図しますが、実アカウントの料金プラン・クォータ・CPU使用量は未確認です。
+- `worker/index.js`・啗eb讓呎ｺ悶・fetch繝上Φ繝峨Λ縲・PI縺ｨASSETS繧堤ｵ瑚ｷｯ蛻ｶ髯蝉ｻ倥″縺ｧ驟堺ｿ｡縲・- `worker/d1-repository.js`・啗ebCrypto縺ｨD1蜊倅ｸSQL CAS縲・ode萓晏ｭ倥↑縺励・- `worker/rules.js` / `domain.js`・壽里蟄倥→蜷後§讌ｭ蜍吶Ν繝ｼ繝ｫ縲・- `public/`・壹・繝ｯ繧､繝医Μ繧ｹ繝医・9雉・肇縺縺代・B/docs/tests/server縺ｯ驟堺ｿ｡縺励↑縺・・- `wrangler.jsonc`・壽里蟄聾orker/D1蜷代￠險ｭ螳壹ゅΟ繧ｰ辟｡蜉ｹ縲『orkers.dev邯ｭ謖√・- `wrangler.local.jsonc`・壼ｮ櫂1縺ｫ隗ｦ繧後↑縺・Ο繝ｼ繧ｫ繝ｫCLI遒ｺ隱咲畑縲・- `schema.sql`・壽里蟄腕ooms縺ｨ蜷後§蜿り・ｮ夂ｾｩ縲り・蜍募ｮ溯｡後＠縺ｪ縺・・- `tools/export-rooms.mjs`・嗷ead-only export縲Ｑrivate蜃ｺ蜉帙∽ｸ頑嶌縺咲ｦ∵ｭ｢縲・- `tests/worker.test.mjs` / `tests/d1-shim.mjs`・壼ｮ櫂1縺ｨ縺ｯ蛹ｺ蛻･縺励◆莠呈鋤繝・せ繝医・
+state縺ｮ螻･豁ｴ縺ｯ譛譁ｰ3蝗槭↓菫晄戟縺励∬ｨ倬鹸繝ｻ髢灘ｼ輔″繝ｻ繝ｪ繝ｳ繧ｯ蜀咲匱陦後・荳縺､縺ｮUPDATE縺ｮCAS縺ｧ遒ｺ螳壹＠縺ｾ縺吶らｫｶ蜷医・409縲∝､ｱ蜉ｹ繝ｪ繝ｳ繧ｯ縺ｯ401縲・夢隕ｧ縺ｫ繧医ｋ譖ｴ譁ｰ縺ｯ403縲よэ蝗ｳ縺励↑縺・Ο繧ｰ/遘伜ｯ・ｒ繝ｬ繧ｹ繝昴Φ繧ｹ縺ｸ蜃ｺ縺励∪縺帙ｓ縲ら┌譁呎棧縺ｮ讓呎ｺ匁ｧ区・繧呈э蝗ｳ縺励∪縺吶′縲∝ｮ溘い繧ｫ繧ｦ繝ｳ繝医・譁咎≡繝励Λ繝ｳ繝ｻ繧ｯ繧ｩ繝ｼ繧ｿ繝ｻCPU菴ｿ逕ｨ驥上・譛ｪ遒ｺ隱阪〒縺吶・

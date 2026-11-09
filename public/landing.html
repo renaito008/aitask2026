@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+		<title>となりの目標｜1on1</title><link rel="stylesheet" href="style.css"><script type="module" src="landing.js"></script>
+	</head>
+	<body>
+		<div class="shell">
+			<header>
+				<div><p class="eyebrow">ONE STEP, TOGETHER.</p><h1>目標</h1></div>
+				<a href="/demo">以前のブラウザ保存版 ↗</a>
+			</header><aside class="demo-notice">ローカルサーバー検証版・架空データ専用 ｜ 公開していません。保存先はこのPCのSQLiteです。</aside>
+			<section class="intro">
+				<div>
+					<p class="eyebrow">1ON1 WORKSPACE</p>
+					<h2>会話から、次の一歩へ。</h2>
+					<p>実施者たちが。目標を、それぞれの画面で確認。</p>
+				</div>
+			</section>
+			<section class="panel">
+				<h2>1on1ルームを作る</h2>
+				<p>まず基本情報を登録します。編集用リンクは本人だけで保管し、相手には閲覧用リンクを渡してください。</p>
+				<form id="create"><div class="profile-fields">
+					<label>メンバー名 <span class="required">必須</span>
+						<input name="memberName" required maxlength="50" placeholder="架空のメンバー名">
+					</label>
+					<label>1on1実施日 <span class="required">必須</span><input name="latestMeetingDate" type="date" required></label>
+					<label>IT業界への入職年月 <span class="required">必須</span><input name="joinedMonth" type="month" required></label>
+				</div>
+				<p id="error" role="alert"></p>
+				<button class="primary" type="submit">ルームを作成</button>
+			</form>
+		</section>
+		<section id="created" class="panel" hidden>
+			<h2>リンクを保管してください</h2><p>リンクを知る人がアクセスできます。編集用リンクは相手へ渡さないでください。</p>
+			<label>メンバー用・編集リンク<input id="editLink" readonly></label>
+			<label>上司用・閲覧リンク<input id="viewLink" readonly></label>
+			<p><a id="openRoom">編集画面を開く →</a></p><small>リンクは自動ではブラウザへ保存しません。この画面を閉じる前に控えてください。</small>
+		</section>
+		<footer>無料公開先・本番DBは未決定です。別PC接続は未公開・未検証です。</footer>
+	</div>
+</body>
+</html>

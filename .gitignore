@@ -1,0 +1,62 @@
+# Dependencies and local Cloudflare state (never commit auth/session caches)
+node_modules/
+.wrangler/
+.dev.vars
+.dev.vars.*
+!/.dev.vars.example
+.env
+.env.*
+!/.env.example
+
+# Application data and private exports; source schema.sql remains tracked
+data/
+private-exports/
+exports/
+*.rooms-export.json
+*.rooms-export.sql
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+*-wal
+*-shm
+*.wal
+*.shm
+
+# Private keys / credentials
+*.key
+*.pem
+*.p8
+*.p12
+*.pfx
+*.jks
+.npmrc
+
+# Backups and generated repair/release packages
+backup/
+backups/
+*-code-backup-*/
+release-artifacts/
+worker-update*.zip
+task2026-*.zip
+*repair*.zip
+*fix*.zip
+/update-manifest.json
+/SOURCE-CHANGES.md
+
+# Local logs, telemetry, test output, and screenshots
+*.log
+logs/
+telemetry/
+.telemetry/
+reports/
+report/
+screenshots/
+playwright-report/
+test-results/
+coverage/
+.nyc_output/
+
+# Editor/OS files; keep source, tests, schema, package-lock and Wrangler config
+.DS_Store
+Thumbs.db

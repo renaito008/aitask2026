@@ -157,3 +157,9 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { border-color
   .panel, .goal { padding: 20px; }
   footer { align-items: flex-start; flex-wrap: wrap; }
 }
+
+/* Room creation copy controls only: preserve the existing palette and other layouts. */
+#created .share-link-row { display: flex; align-items: stretch; gap: 8px; margin: 7px 0 16px; }
+#created .share-link-row input { flex: 1; width: 0; min-width: 0; margin-top: 0; }
+#created .share-link-row button { flex: 0 0 auto; min-width: 76px; min-height: 44px; padding: 10px 12px; }
+#created #copyStatus { min-height: 1.65em; margin: 0; color: var(--accent-ice); font-size: 13px; }

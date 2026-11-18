@@ -2,7 +2,7 @@
 <html lang="ja">
 	<head>
 		<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-		<title>となりの目標｜1on1</title><link rel="stylesheet" href="style.css"><script type="module" src="landing.js"></script>
+		<title>1on1進捗管理</title><link rel="stylesheet" href="style.css"><script type="module" src="landing.js"></script>
 	</head>
 	<body>
 		<div class="shell">
@@ -33,8 +33,8 @@
 		</section>
 		<section id="created" class="panel" hidden>
 			<h2>リンクを保管してください</h2><p>リンクを知る人がアクセスできます。編集用リンクは相手へ渡さないでください。</p>
-			<label>メンバー用・編集リンク<input id="editLink" readonly></label>
-			<label>上司用・閲覧リンク<input id="viewLink" readonly></label>
+			<label for="editLink">メンバー用・編集リンク</label><div class="share-link-row"><input id="editLink" readonly><button type="button" data-copy-link="editLink" aria-label="編集リンクをコピー">コピー</button></div>
+			<label for="viewLink">上司用・閲覧リンク</label><div class="share-link-row"><input id="viewLink" readonly><button type="button" data-copy-link="viewLink" aria-label="閲覧リンクをコピー">コピー</button></div><p id="copyStatus" role="status" aria-live="polite"></p>
 			<p><a id="openRoom">編集画面を開く →</a></p><small>リンクは自動ではブラウザへ保存しません。この画面を閉じる前に控えてください。</small>
 		</section>
 		<footer>無料公開先・本番DBは未決定です。別PC接続は未公開・未検証です。</footer>

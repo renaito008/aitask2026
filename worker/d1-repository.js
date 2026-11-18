@@ -31,18 +31,18 @@ export class D1Repository {
   }
   async read(raw) {
     const {row, role} = await this.access(raw);
-    return {state: JSON.parse(row.state), role};
+    return {state: D.normalizeState(JSON.parse(row.state)), role};
   }
   async update(raw, body, action) {
     const {row, role} = await this.access(raw);
     requireThat(role === 'edit', 403, '閲覧用リンクでは変更できません。');
-    fields(body, action === 'save' ? ['expectedRevision','profile','commands'] : action === 'record' ? ['expectedRevision','overwrite'] : action === 'remove' ? ['expectedRevision','gid'] : ['expectedRevision','kind']);
-    const state = D.clone(JSON.parse(row.state));
+    fields(body, action === 'save' ? ['expectedRevision','profile','commands','meetingNotes'] : action === 'record' ? ['expectedRevision','overwrite'] : action === 'remove' ? ['expectedRevision','gid'] : ['expectedRevision','kind']);
+    const state = D.normalizeState(JSON.parse(row.state));
     requireThat(Number.isInteger(body.expectedRevision) && state.revision === body.expectedRevision, 409, '別の画面で更新されています。入力を控えてから最新情報を読み込んでください。');
     let tokens;
     business(() => {
       if (action === 'save') {
-        state.profile = cleanProfile(body.profile);
+        D.setMeetingDetails(state, cleanProfile(body.profile), body.meetingNotes, Object.hasOwn(body,'meetingNotes'));
         requireThat(Array.isArray(body.commands) && body.commands.length <= 200, 400, '操作数が上限を超えています。一度保存してください。');
         for (const command of body.commands) applyCommand(state, command);
       } else if (action === 'record') {

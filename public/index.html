@@ -29,6 +29,12 @@
 		<label>IT業界歴 <span class="required">必須</span><input id="joinedMonth" type="month" required><small id="experience"></small></label>
 	</div>
 </section>
+<section class="meeting-notes panel" aria-labelledby="meetingNotesLabel">
+ <div class="section-heading"><h2 id="meetingNotesLabel">今回の1on1の備考 <span class="notes-optional">任意</span></h2><span id="notesCount" role="status" aria-live="polite">0 / 500字</span></div>
+ <label class="notes-label" for="meetingNotes">備考（500字以内）</label>
+ <textarea id="meetingNotes" rows="4" aria-describedby="notesHint notesCount" placeholder="話した内容や、次回確認したいことなど"></textarea>
+ <small id="notesHint">上司にも表示されます。「変更を保存」の後、「今回の1on1を記録」で履歴に残せます。</small>
+</section>
 <nav class="tabs" aria-label="表示内容"><button id="currentTab" class="selected" aria-pressed="true">現在の目標</button>
 	<button id="historyTab" aria-pressed="false">過去3回の1on1</button>
 </nav>

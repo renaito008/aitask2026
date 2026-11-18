@@ -163,3 +163,15 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { border-color
 #created .share-link-row input { flex: 1; width: 0; min-width: 0; margin-top: 0; }
 #created .share-link-row button { flex: 0 0 auto; min-width: 76px; min-height: 44px; padding: 10px 12px; }
 #created #copyStatus { min-height: 1.65em; margin: 0; color: var(--accent-ice); font-size: 13px; }
+
+/* Optional meeting notes only. */
+.meeting-notes { margin: 20px 0; }
+.meeting-notes .section-heading { margin-bottom: 8px; }
+.notes-optional { font-size: 12px; font-weight: 400; color: var(--muted); }
+.notes-label { font-size: 13px; }
+.meeting-notes textarea { display: block; min-height: 112px; }
+.meeting-notes small { display: block; margin-top: 8px; }
+#notesCount.notes-over-limit { color: var(--accent-ice); text-decoration: underline; text-decoration-color: var(--accent-cyan); }
+.history-notes { margin-top: 16px; }
+.history-notes h3 { font-size: 14px; }
+.history-notes p { margin: 6px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; color: #BDD8E2; }

@@ -1,11 +1,12 @@
 import http from 'node:http';
+import {renderRoomHTML} from './worker/room-html.js';
 import {readFile,mkdir} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import {resolve} from 'node:path';
 import {SqliteRepository,ApiError} from './server-repository.mjs';
 const root=new URL('./',import.meta.url);
 export function createServer(repo){
- const allowed=new Set(['/index.html','/style.css','/app.js','/shared-app.js','/http-repository.js','/domain.js','/repository.js','/landing.html','/landing.js']);
+ const allowed=new Set(['/index.html','/style.css','/shared-app.js','/http-repository.js','/domain.js','/landing.html','/landing.js']);
  return http.createServer(async(req,res)=>{
   const headers={'Cache-Control':'no-store','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"};
   const json=(status,value)=>{res.writeHead(status,{...headers,'Content-Type':'application/json; charset=utf-8'});res.end(JSON.stringify(value));};
@@ -26,9 +27,10 @@ export function createServer(repo){
     throw new ApiError(404,'APIが見つかりません。');
    }
    if(!['GET','HEAD'].includes(req.method))throw new ApiError(405,'許可されていない操作です。');
-   const file=path==='/'?'/landing.html':path==='/room'||path==='/demo'?'/index.html':path;
+   if(path==='/demo'||path==='/index.html'){res.writeHead(302,{...headers,Location:'/'});res.end();return;}
+   const file=path==='/'?'/landing.html':path==='/room'?'/index.html':path;
    if(!allowed.has(file))throw new ApiError(404,'ページが見つかりません。');
-   let data=await readFile(new URL(file.slice(1),root));if(path==='/room')data=Buffer.from(data.toString('utf8').replace('src="app.js"','src="shared-app.js"').replace('ローカル試作・架空データ専用 ｜ 保存先はこのブラウザ内です。別PC共有・認証・リンク発行は未実装です。','ローカルサーバー検証版・架空データ専用 ｜ このPCのSQLiteへ保存。公開・別PC接続は行っていません。').replace('<footer>', '<section id="sharePanel" class="panel" hidden><h2>共有リンクの管理</h2><p>閲覧リンクだけを上司に渡してください。再発行すると対象の古いリンクは即座に使えなくなります。</p><div class="toolbar"><button id="showEditLink">編集リンクを表示</button><button data-rotate="view">閲覧リンクを再発行</button><button data-rotate="edit">編集リンクを再発行</button><button data-rotate="both">両方を再発行</button></div><div id="issuedLinks" hidden><label>今回表示・発行したリンク<textarea id="linkOutput" readonly rows="4"></textarea></label><small>閉じる前に必ず控えてください。閲覧リンクから編集リンクは取得できません。</small></div></section><footer>').replace('href="?mode=view"','href="/"').replace('上司の閲覧デモ ↗','ルーム作成画面へ ↗'));
+   let data=await readFile(new URL(file.slice(1),root));if(path==='/room')data=Buffer.from(renderRoomHTML(data.toString('utf8')));
    res.writeHead(200,{...headers,'Content-Type':file.endsWith('.css')?'text/css; charset=utf-8':file.endsWith('.js')?'text/javascript; charset=utf-8':'text/html; charset=utf-8'});res.end(req.method==='HEAD'?undefined:data);
   }catch(e){const status=e instanceof ApiError?e.status:e instanceof TypeError?400:422;json(status,{error:e instanceof ApiError||status===422?e.message:'入力を確認してください。'});}
  });

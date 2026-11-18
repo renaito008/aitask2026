@@ -3,7 +3,7 @@ import {ApiError, requireThat} from './errors.js';
 import {renderRoomHTML} from './room-html.js';
 
 export const MAX_BODY_BYTES = 262144;
-export const STATIC_FILES = new Set(['/index.html','/style.css','/app.js','/shared-app.js','/http-repository.js','/domain.js','/repository.js','/landing.html','/landing.js']);
+export const STATIC_FILES = new Set(['/index.html','/style.css','/shared-app.js','/http-repository.js','/domain.js','/landing.html','/landing.js']);
 const SECURITY = {
   'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer',
   'X-Content-Type-Options': 'nosniff',
@@ -64,7 +64,8 @@ export default {
         throw new ApiError(404, 'APIが見つかりません。');
       }
       requireThat(['GET','HEAD'].includes(request.method), 405, '許可されていない操作です。');
-      const file = path === '/' ? '/landing.html' : path === '/room' || path === '/demo' ? '/index.html' : path;
+      if (path === '/demo' || path === '/index.html') return new Response(null, {status:302, headers:{...SECURITY, Location:'/'}});
+      const file = path === '/' ? '/landing.html' : path === '/room' ? '/index.html' : path;
       requireThat(STATIC_FILES.has(file), 404, 'ページが見つかりません。');
       requireThat(env.ASSETS?.fetch, 503, '静的ファイルの設定を確認してください。');
       const assetURL = new URL(file, url.origin);

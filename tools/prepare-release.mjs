@@ -17,7 +17,7 @@ export async function prepareRelease(){
   if(!versions.wrangler?.startsWith('4.')||!versions.esbuild||!versions.workerd)throw Error('Wrangler4を固定したpackage-lock.jsonを確認してください。');
   for(const name of ['esbuild','workerd'])if(pkg.allowScripts?.[name+'@'+versions[name]]!==true)throw Error('allowScriptsと固定lockのビルド依存バージョンが一致していません。');
   run(['--test',...fs.readdirSync(path.join(root,'tests')).filter(name=>name.endsWith('.test.mjs')).map(name=>'tests/'+name)]);
-  const assets=['index.html','style.css','app.js','shared-app.js','http-repository.js','domain.js','repository.js','landing.html','landing.js'];
+  const assets=['index.html','style.css','shared-app.js','http-repository.js','domain.js','landing.html','landing.js'];
   const output=fs.readdirSync(path.join(root,'public')).sort();if(JSON.stringify(output)!==JSON.stringify([...assets].sort()))throw Error('publicの内容がホワイトリストと一致しません。');
   const sha=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
   for(const name of assets)if(sha(path.join(root,name))!==sha(path.join(root,'public',name)))throw Error('公開資産が元ファイルと一致しません。');
